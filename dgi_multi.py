@@ -1,12 +1,3 @@
-"""
-Deep Graph Infomax in DGL
-
-References
-----------
-Papers: https://arxiv.org/abs/1809.10341
-Author's code: https://github.com/PetarV-/DGI
-"""
-
 import torch
 import torch.nn as nn
 import math
@@ -124,29 +115,4 @@ class Multi_DGI(nn.Module):
 
         return l1 + l2
 
-
-class Classifier(nn.Module):
-    def __init__(self, n_hidden, n_classes, dropout=0.2):
-        super(Classifier, self).__init__()
-        self.fc = nn.Sequential(
-            nn.Linear(n_hidden, int(n_hidden//4)),
-            nn.PReLU(),
-            nn.Dropout(dropout),
-            # nn.Linear(int(n_hidden//2), int(n_hidden//4)),
-            # nn.PReLU(),
-            # nn.Dropout(dropout),
-            nn.Linear(int(n_hidden//4), n_classes)
-        )
-        self.reset_parameters()
-
-    def reset_parameters(self):
-        for m in self.modules():
-            if isinstance(m, nn.Linear):
-                nn.init.xavier_normal_(m.weight)
-                if m.bias is not None:
-                    nn.init.zeros_(m.bias)
-
-    def forward(self, features):
-        features = self.fc(features)
-        return features
 
